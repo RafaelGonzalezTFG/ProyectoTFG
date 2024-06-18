@@ -11,9 +11,11 @@ use \PDOException;
 
 class Proveedores
 {
+    //Funciones para obtener todos los proveedores
     public function obtenerTodosProveedores($conexPDO)
     {
-        if (isset($conexPDO)) {
+        //Comprobamos la conexion
+        if ($conexPDO != null) {
             try {
                 $sentencia = $conexPDO->prepare("SELECT * FROM quesorpresa.proveedores");
                 $sentencia->execute();

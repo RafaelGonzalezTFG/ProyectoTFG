@@ -1,4 +1,13 @@
 <?php
+//Creamos session si no esta creada
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+//Se guardan en variables en caso de ser necesarias
+$idCuentap = isset($_SESSION["idCuentas"]) ? $_SESSION["idCuentas"] : null;
+$rolp = isset($_SESSION["Rol"]) ? $_SESSION["Rol"] : null;
+
+
 //Importamos las clases necesarias
 use \modelo\Productos;
 use \modelo\Utils;
@@ -12,13 +21,13 @@ $mensaje = null;
 //Objeto PDO de conexion
 $conexPDO = Utils::conectar();
 //Objeto que gestionara los metodos del Producto_Model.php
-$gestorProduct = new Productos();
+$gestorProducto = new Productos();
 
 //Recolectamos los datos de los Productos
-$datosProductos = $gestorProduct -> obtenerTodosProductos($conexPDO);
+$datosProductos = $gestorProducto->obtenerTodosProductos($conexPDO);
 
 //Paginacion
-$totalProductos = $gestorProduct->obtenerTodosProductos($conexPDO);
+$totalProductos = $gestorProducto->obtenerTodosProductos($conexPDO);
 $itemsPorPagina = 10;
 $totalPaginas = ceil(count($totalProductos) / $itemsPorPagina);
 
@@ -34,7 +43,6 @@ if (isset($_POST['Pag'])) {
 
 try {
     $datosProductos = $gestorProduct->getProductosPag($conexPDO, true,"idProductos", $paginaActual, $itemsPorPagina);
-    var_dump($datosProductos);
     include("../views/gestionar_productos_vista.php");
 } catch (\Throwable $th) {
     print("Error al pintar los Datos" . $th->getMessage());

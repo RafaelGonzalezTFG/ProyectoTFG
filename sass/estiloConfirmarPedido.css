@@ -1,0 +1,49 @@
+body {
+    background-color: #f0f0f0;
+}
+
+.containerFormulario {
+    background-color: #FFDF00;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    max-width: 900px;
+}
+
+.form-control {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.btn-custom {
+    background-color: #FFC000;
+    color: #000000;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #FFC000;
+}
+
+.form-label {
+    color: #000000;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.btn-full-width {
+    width: 100%;
+}
+
+.cart-img {
+    width: 50px;
+    height: 50px;
+}
+
+.mt-navbar {
+    margin-top: 150px; 
+    margin-bottom: 20px;
+}

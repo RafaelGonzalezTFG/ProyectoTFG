@@ -1,0 +1,20 @@
+.product-card {
+    max-width: 540px;
+    margin: auto;
+    margin-top: 150px;
+    margin-bottom: 20px;
+}
+
+.product-img {
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 1.5rem;
+}
+
+.quantity-input {
+    width: 70px;
+}
+

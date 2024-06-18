@@ -1,0 +1,43 @@
+.product-img {
+    width: 100%;
+    height: auto;
+}
+
+.sidebar {
+    background-color: #f8f9fa;
+    height: 100vh;
+    position: sticky;
+    top: 60px; /* Ajusta este valor según sea necesario */
+    margin-top: 20px; /* Ajusta este valor para más espacio */
+}
+
+.product-card {
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 250px;
+}
+
+.product-card .card-body .btn-custom {
+    margin-right: 5px;
+}
+
+.product-card img {
+    height: 150px;
+    object-fit: fill;
+}
+
+.product-card .card-body {
+    padding: 10px;
+}
+
+.btn-custom {
+    font-size: 12px;
+}
+
+.submenu {
+    padding-left: 20px;
+}
+
+.main-content {
+    padding-left: 270px;
+}

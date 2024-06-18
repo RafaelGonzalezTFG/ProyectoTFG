@@ -1,18 +1,18 @@
 <?php
 
-// Agrupamos todo en modelo
+//Agrupamos todo en modelo
 namespace modelo;
 
-// Importamos las clases para poder conectar con la base de datos
+//Importamos las clases para poder conectar con la base de datos
 use \PDO;
 use \PDOException;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Creamos una clase Utils
+//Creamos una clase Utils
 class Utils
 {
-    // Función para conectarnos con la base de datos mediante un objeto PDO
+    //Función para conectarnos con la base de datos mediante un objeto PDO
     public static function conectar()
     {
         //Variable
@@ -38,7 +38,7 @@ class Utils
         }
     }
 
-    // Función para limpiar los datos
+    //Función para limpiar los datos
     public static function limpiar_datos($data)
     {
         $data = trim($data);
@@ -46,62 +46,10 @@ class Utils
         $data = htmlspecialchars($data);
         return $data;
     }
-    
-    //EnviarCorreo
-    public static function enviarCorreoActivacion($correo, $codigoActivacion)
-    {
+    //Funcion para enviar el correo de activacion
+    public static function enviarCorreoActivacion($correo, $codigoActivacion) {
         require_once("../vendor/autoload.php");
         $config = require("../email_configuracion.php");
-
-        // Debugging - Check if variables are set
-        var_dump($config);
-
-        $correo = new PHPMailer(true);
-
-        try {
-            // Server settings
-            $correo->isSMTP();
-            $correo->Host = $config['HOST'];
-            $correo->SMTPAuth = true;
-            $correo->Username = $config['SMTP_USER'];
-            $correo->Password = $config['SMTP_PASS'];
-            $correo->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $correo->Port = $config['SMTP_PORT'];
-
-            // Recipients
-            $correo->setFrom($config['SMTP_EMAIL'], $config['SMTP_NAME']);
-            $correo->addAddress($correo);
-
-            // Content
-            $correo->isHTML(true);
-            $correo->Subject = 'Activación de cuenta';
-            $correo->Body = "Hola,<br><br>Para activar tu cuenta, utiliza el siguiente código de activación: " . $codigoActivacion . "<br><br>Haz clic <a href='http://localhost/temploWargames/controllers/User_Controller.php?action=activate&email=" . $correo . "&codigo=" . $codigoActivacion . "'>aquí</a> para activar tu cuenta.";
-
-            $correo->send();
-            return true;
-        } catch (Exception $e) {
-            echo "Error al enviar el mensaje: {$correo->ErrorInfo}";
-            return false;
-        }
-    }
-}
-
-// Función para generar el código de activación aleatorio
-function generarCodigoActivacion()
-{
-  $codigoActivacion = mt_rand(100000, 999999); // Genera un código de 6 dígitos aleatorio
-  return $codigoActivacion;
-}
-
-/*
-//EnviarCorreo
-    public static function enviarCorreoActivacion($email, $codigoActivacion)
-    {
-        require_once("../vendor/autoload.php");
-        $config = require("../email_configuracion.php");
-
-        // Debugging - Check if variables are set
-        var_dump($config);
 
         $mail = new PHPMailer(true);
 
@@ -117,13 +65,15 @@ function generarCodigoActivacion()
 
             // Recipients
             $mail->setFrom($config['SMTP_EMAIL'], $config['SMTP_NAME']);
-            $mail->addAddress($email);
+            $mail->addAddress($correo);
 
             // Content
             $mail->isHTML(true);
             $mail->Subject = 'Activación de cuenta';
-            $mail->Body = "Hola,<br><br>Para activar tu cuenta, utiliza el siguiente código de activación: " . 1234 . "<br><br>Haz clic <a href='http://localhost/temploWargames/controllers/User_Controller.php?action=activate&email=" . $email . "&codigo=" . $codigoActivacion . "'>aquí</a> para activar tu cuenta.";
+            $mail->Body = "Hola,<br><br>Para activar tu cuenta, utiliza el siguiente código de activación: " . $codigoActivacion . "<br><br>Haz clic <a href='http://localhost/TiendaQuesorpresa/controller/activar_codigo_controlador.php?correo=" . urlencode($correo) . "'>aquí</a> para activar tu cuenta.";
 
+            $mail->CharSet = 'UTF-8';  // Ensure the charset is set to UTF-8
+            
             $mail->send();
             return true;
         } catch (Exception $e) {
@@ -131,4 +81,83 @@ function generarCodigoActivacion()
             return false;
         }
     }
-*/ 
+    //Funcion para enviar el correo de contactos
+    public static function enviarContactos($contactos) {
+        require_once("../vendor/autoload.php");
+        $config = require("../email_configuracion.php");
+
+
+        $mail = new PHPMailer(true);
+
+        try {
+            // Server settings
+            $mail->isSMTP();
+            $mail->Host = $config['HOST'];
+            $mail->SMTPAuth = true;
+            $mail->Username = $config['SMTP_USER'];
+            $mail->Password = $config['SMTP_PASS'];
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = $config['SMTP_PORT'];
+
+            // Recipients
+            $mail->setFrom($config['SMTP_EMAIL'], $config['SMTP_NAME']);
+            $mail->addAddress("proyectofingradormgp@gmail.com");
+
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Mensaje del usuario: ' . $contactos["nombre"] . ' ' . $contactos["nombre"] . ' desde ' . $contactos["correo"] . '';
+            $mail->Body = $contactos["motivo"];
+
+            $mail->CharSet = 'UTF-8';  // Ensure the charset is set to UTF-8
+            
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            echo "Error al enviar el mensaje: {$mail->ErrorInfo}";
+            return false;
+        }
+    }
+    //Funcion en la que enviamos un correo informando de la compra
+    public static function enviarFactura($correo, $totalFactura) {
+        require_once("../vendor/autoload.php");
+        $config = require("../email_configuracion.php");
+
+        $mail = new PHPMailer(true);
+
+        try {
+            // Server settings
+            $mail->isSMTP();
+            $mail->Host = $config['HOST'];
+            $mail->SMTPAuth = true;
+            $mail->Username = $config['SMTP_USER'];
+            $mail->Password = $config['SMTP_PASS'];
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = $config['SMTP_PORT'];
+
+            // Recipients
+            $mail->setFrom($config['SMTP_EMAIL'], $config['SMTP_NAME']);
+            $mail->addAddress($correo);
+
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Gracias por comprar en Quesorpresa';
+            $mail->Body = "Este es el importe de su pago: " . $totalFactura . "€<br>Que disfrute de su quesos y utensilios";
+
+            $mail->CharSet = 'UTF-8';  // Ensure the charset is set to UTF-8
+            
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            echo "Error al enviar el mensaje: {$mail->ErrorInfo}";
+            return false;
+        }
+    }
+}
+
+//Función para generar el código de activación aleatorio
+function generarCodigoActivacion()
+{
+  $codigoActivacion = mt_rand(100000, 999999); // Genera un código de 6 dígitos aleatorio
+  return $codigoActivacion;
+}
+

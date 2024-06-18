@@ -1,0 +1,53 @@
+body {
+    background-color: #f0f0f0;
+    /* Puedes cambiar esto si deseas otro color de fondo general */
+    padding-top: 100px;
+}
+
+.containerModificar {
+    background-color: #FFDF00;
+    /* Color primario para el formulario */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 200px;
+    max-width: 900px;
+
+    padding-top: 120px;
+    padding-bottom: 20px;
+    /* Ajusta este valor según la altura de tu navbar */
+
+}
+
+.form-control {
+    background-color: #ffffff;
+    /* Color de fondo para los campos de entrada */
+    color: #000000;
+    /* Color de las letras en los campos de entrada */
+}
+
+.btn-custom {
+    background-color: #FFC000;
+    /* Color de los detalles para botones */
+    color: #000000;
+    /* Color de las letras en los botones */
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: darken(#FFC000, 10%);
+    /* Oscurece el color del botón al pasar el ratón */
+}
+
+.form-label {
+    color: #000000;
+    /* Color de las letras para etiquetas */
+}
+
+.text-center {
+    text-align: center;
+}
+
+.btn-full-width {
+    width: 100%;
+}

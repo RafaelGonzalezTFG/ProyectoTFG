@@ -9,7 +9,8 @@ require_once("../model/utils.php");
 use \PDO;
 use \PDOException;
 
-class Usuarios{
+class Usuarios
+{
     //Funcion para registrar un usuario en la base de datos
     function registrarUsuario($conexPDO, $nombre, $apellido, $telefono, $correo, $contrasena)
     {
@@ -17,31 +18,31 @@ class Usuarios{
         try {
             if (isset($conexPDO) && isset($nombre) && isset($apellido) && isset($telefono) && isset($correo) && isset($contrasena)) {
 
-                // Iniciar la transacción
+                //Iniciamos la transacción
                 $conexPDO->beginTransaction();
 
-                // Encriptar la contraseña
+                //Encriptamos la contraseña
                 $contrasenaEncriptada = password_hash($contrasena, PASSWORD_BCRYPT);
 
                 $rol = "Usuario";
                 $estado = "Inactivo";
 
-                // Generar el código de activación
+                //Generamos el código de activación
                 $codigoActivacion = generarCodigoActivacion();
 
                 $activado = 0;
 
-                // Insertar los datos en la base de datos
+                //Insertamos los datos en la base de datos
                 $sentenciaUsuario = $conexPDO->prepare("INSERT INTO quesorpresa.usuarios (Nombre, Apellido, Telefono) VALUES (:Nombre, :Apellido, :Telefono)");
                 $sentenciaUsuario->bindParam(":Nombre", $nombre);
                 $sentenciaUsuario->bindParam(":Apellido", $apellido);
                 $sentenciaUsuario->bindParam(":Telefono", $telefono);
                 $sentenciaUsuario->execute();
 
-
+                //Obtenemos el ultimo id introducido
                 $idUsuarios = $conexPDO->lastInsertId();
 
-                // Insertar los datos en la base de datos
+                //Insertamos de nuevo los datos en la base de datos
                 $sentenciaCuenta = $conexPDO->prepare("INSERT INTO quesorpresa.cuentas (Contrasena, Correo, Rol, Estado, CodigoActivacion, Activado, idUsuarios) VALUES (:Contrasena, :Correo, :Rol, :Estado, :CodigoActivacion, :Activado, :idUsuarios)");
                 $sentenciaCuenta->bindParam(":Contrasena", $contrasenaEncriptada);
                 $sentenciaCuenta->bindParam(":Correo", $correo);
@@ -50,16 +51,17 @@ class Usuarios{
                 $sentenciaCuenta->bindParam(":CodigoActivacion", $codigoActivacion);
                 $sentenciaCuenta->bindParam(":Activado", $activado);
                 $sentenciaCuenta->bindParam(":idUsuarios", $idUsuarios);
+                $sentenciaCuenta->execute();
 
-                // Comprobamos y realizamos la transacción
+                //Comprobamos y realizamos la transacción
                 $conexPDO->commit();
 
                 return true;
             }
         } catch (PDOException $e) {
-            // Manejo de excepciones
+            //Manejo de excepciones
             echo "Error al registrar el usuario: " . $e->getMessage();
-            return 0; // Código de resultado para fallo en el registro
+            return 0; //Código de resultado para fallo en el registro
         }
     }
 
@@ -68,24 +70,24 @@ class Usuarios{
     {
         try {
             if (isset($conexPDO)) {
-                // Preparar la consulta
+                //Preparamos la consulta
                 $sentencia = $conexPDO->prepare("SELECT COUNT(*) FROM quesorpresa.cuentas WHERE Correo = :Correo");
 
-                // Asignar el valor al marcador de posición
+                //Asignamos el valor al marcador de posición
                 $sentencia->bindParam(":Correo", $correo);
 
-                // Ejecutar la consulta
+                //Ejecutamos la consulta
                 $sentencia->execute();
 
-                // Obtener el resultado
+                //Obtenemos el resultado
                 $cantidad = $sentencia->fetchColumn();
 
-                // Verificar si el correo electrónico existe
+                //Verificamos si el correo electrónico existe
                 if ($cantidad > 0) {
-                    // El correo electrónico ya está registrado
+                    //El correo electrónico ya está registrado
                     return true;
                 } else {
-                    // El correo electrónico no está registrado
+                    //El correo electrónico no está registrado
                     return false;
                 }
             }
@@ -95,5 +97,5 @@ class Usuarios{
             return false;
         }
     }
+    
 }
-

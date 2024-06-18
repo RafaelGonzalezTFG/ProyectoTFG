@@ -1,0 +1,44 @@
+.login-container {
+    max-width: 900px;
+    margin: 70px auto; /* Ajusta este valor según sea necesario */
+    padding: 20px;
+    background-color: #FFDF00;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+}
+
+.btn-custom {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000000;
+}
+
+.btn-custom:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.alert-container {
+    margin-top: 20px;
+}
+
+/* Asegura que el navbar esté siempre encima de otros elementos */
+.navbar {
+    z-index: 1030; /* Este es el valor predeterminado de Bootstrap para navbars fixed-top */
+}
+
+/* Asegura que el contenedor principal no se superponga al navbar */
+.contenidoRegistro {
+    position: relative;
+    padding-top: 100px;
+    z-index: 1;
+}
+
+/* Margen superior para evitar que el formulario esté pegado al navbar */
+.mt-navbar {
+    margin-top: 70px; /* Ajusta este valor según la altura de tu navbar */
+}

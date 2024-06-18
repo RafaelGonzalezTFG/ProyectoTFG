@@ -1,0 +1,51 @@
+:root {
+    --color-primario: #FFDF00;
+    --color-secundario: #FFA200;
+    --color-detalles: #FFC000;
+    --color-letras: #000000;
+}
+
+body {
+    color: var(--color-letras);
+}
+
+.card-img-top {
+    height: 200px; /* Altura fija para todas las imágenes /
+    object-fit: cover; / Asegura que la imagen cubra el área sin distorsionarse */
+}
+
+.btn-primary {
+    background-color: var(--color-primario);
+    border-color: var(--color-primario);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-secundario);
+    border-color: var(--color-secundario);
+}
+
+.card {
+    border: none;
+}
+
+.card .card-body {
+    background-color: var(--color-detalles);
+}
+
+h1, h2 {
+    text-align: center;
+    color: var(--color-letras);
+}
+
+.contact-btn-container {
+    text-align: left;
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    color: inherit;
+    text-decoration: none;
+}

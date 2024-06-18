@@ -1,4 +1,11 @@
 <?php
+//Creamos session si no esta creada
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+//Se guardan en variables en caso de ser necesarias
+$idCuentap = isset($_SESSION["idCuentas"]) ? $_SESSION["idCuentas"] : null;
+$rolp = isset($_SESSION["Rol"]) ? $_SESSION["Rol"] : null;
 // Importamos las clases necesarias
 use modelo\Productos;
 use modelo\Utils;
@@ -7,6 +14,7 @@ use modelo\Utils;
 require_once("../model/productos.php");
 require_once("../model/utils.php");
 
+//Creamos un objeto Producto
 $gestorProduct = new Productos();
 
 //Conectamos con la base de datos
@@ -51,7 +59,7 @@ if (isset($_POST['Pag'])) {
 
 try {
     $datosProductos = $gestorProduct->getProductosPag($conexPDO, true, "idProductos", $paginaActual, $itemsPorPagina);
-    include("../views/gestionar_productos_vista.php");
+    include("../views/mostrar_productos_vista.php");
 } catch (\Throwable $th) {
     print("Error al pintar los Datos" . $th->getMessage());
 }

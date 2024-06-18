@@ -1,0 +1,52 @@
+body {
+    background-color: #f0f0f0;
+    /* Puedes cambiar esto si deseas otro color de fondo general */
+}
+
+.containerContacto {
+    background-color: #FFDF00;
+    /* Color primario para el formulario */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    max-width: 900px;
+}
+
+.form-control {
+    background-color: #ffffff;
+    /* Color de fondo para los campos de entrada */
+    color: #000000;
+    /* Color de las letras en los campos de entrada */
+}
+
+.btn-custom {
+    background-color: #FFC000;
+    /* Color de los detalles para botones */
+    color: #000000;
+    /* Color de las letras en los botones */
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: darken(#FFC000, 10%);
+    /* Oscurece el color del botón al pasar el ratón */
+}
+
+.form-label {
+    color: #000000;
+    /* Color de las letras para etiquetas */
+}
+
+.text-center {
+    text-align: center;
+}
+
+.btn-full-width {
+    width: 100%;
+}
+
+.mt-navbar {
+    margin-top: 150px; /*Ajusta este valor según la altura de tu navbar */
+    margin-bottom: 20px;
+}

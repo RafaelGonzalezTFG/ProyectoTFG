@@ -11,9 +11,11 @@ use \PDOException;
 
 class Categorias
 {
+    //Funcion para obtener todas las categorias
     public function obtenerTodasCategorias($conexPDO)
     {
-        if (isset($conexPDO)) {
+        //Comprobamos la conexion
+        if ($conexPDO != null) {
             try {
                 $sentencia = $conexPDO->prepare("SELECT * FROM quesorpresa.categorias");
                 $sentencia->execute();

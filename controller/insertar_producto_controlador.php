@@ -1,71 +1,76 @@
 <?php
-// Importamos las clases necesarias
+// Iniciar la sesión si no ha sido iniciada
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-use modelo\Categorias;
+// Verificar roles y permisos
+$idCuentap = isset($_SESSION["idCuentas"]) ? $_SESSION["idCuentas"] : null;
+$rolp = isset($_SESSION["Rol"]) ? $_SESSION["Rol"] : null;
+
+// Incluir los modelos necesarios
 use modelo\Productos;
-use modelo\Proveedores;
 use modelo\Utils;
-
 //Añadimos el código del modelo
 require_once("../model/productos.php");
 require_once("../model/proveedores.php");
 require_once("../model/categorias.php");
 require_once("../model/utils.php");
-
-
-// Inicialización de variables para controlar el flujo
-$accion = "";  // 'insertar' es el valor predeterminado si 'accion' no está definido
-$url = "../views/gestionar_productos_vista.php"; // URL predeterminada
+//Variable para mensajes
 $mensaje = "";
 
 // Conexión con la base de datos
-$gestorProveedor = new Proveedores();
-$gestorCategoria = new Categorias();
 $conexPDO = Utils::conectar();
 
-if (!$conexPDO) {
-    echo "Error al conectar con la base de datos.";
-    $datosProveedores = []; // Asegura que la variable está definida incluso en caso de error
-} else {
-    // Recolectamos los datos de los proveedores
-    $datosProveedores = $gestorProveedor->obtenerTodosProveedores($conexPDO);
-}
+// Verificar si el formulario ha sido enviado
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Limpiar y sanitizar los datos del formulario
+    $nombre = Utils::limpiar_datos($_POST['Nombre']);
+    $descripcion = Utils::limpiar_datos($_POST['Descripcion']);
+    $peso = Utils::limpiar_datos($_POST['Peso']);
+    $material = Utils::limpiar_datos($_POST['Material']);
+    $marca = Utils::limpiar_datos($_POST['Marca']);
+    $proveedores = $_POST['Proveedores'];
+    $categorias = Utils::limpiar_datos($_POST['Categorias']);
+    $precio = Utils::limpiar_datos($_POST['Precio']);
+    $stock = Utils::limpiar_datos($_POST['Stock']);
+    $fechaAdquisicion = Utils::limpiar_datos($_POST['FechaAdquisicion']);
+    $fechaCaducidad = Utils::limpiar_datos($_POST['FechaCaducidad']);
 
-if (!$conexPDO) {
-    echo "Error al conectar con la base de datos.";
-    $datosCategorias = []; // Asegura que la variable está definida incluso en caso de error
-} else {
-    // Recolectamos los datos de los proveedores
-    $datosCategorias = $gestorCategoria->obtenerTodasCategorias($conexPDO);
-}
+    //Controlamos la imagen que nos envia el usuario
+    $imagen = $_FILES['Imagen']['name'];
+    $target_dir = "../img/imagenesSubidas/";
+    $target_file = $target_dir . basename($_FILES['Imagen']['name']);
 
-if (
-    isset($_POST["idProductos"]) && isset($_POST["Nombre"]) && isset($_POST["Descripcion"]) &&
-    isset($_POST["Material"]) && isset($_POST["Precio"]) && isset($_POST["Stock"]) && isset($_POST["Imagen"])
-    && isset($_POST["FechaAdquisicion"]) && isset($_POST["FechaCaducidad"]) && isset($_POST["Marca"]) && isset($_POST["Peso"])
-    && isset($_POST["Proveedores"]) && isset($_POST["Categorias"])
-) {
-    $producto = array();
-    $producto["idProductos"] = $_POST["idProductos"];
-    $producto["Nombre"] = $_POST["Nombre"];
-    $producto["Descripcion"] = $_POST["Descripcion"];
-    $producto["Material"] = $_POST["Material"];
-    $producto["Precio"] = $_POST["Precio"];
-    $producto["Stock"] = $_POST["Stock"];
-    $producto["Imagen"] = $_POST["Imagen"];
-    $producto["FechaAdquisicion"] = $_POST["FechaAdquisicion"];
-    $producto["FechaCaducidad"] = $_POST["FechaCaducidad"];
-    $producto["Marca"] = $_POST["Marca"];
-    $producto["Peso"] = $_POST["Peso"];
+    //Movemos la imagen a su destino
+    if (move_uploaded_file($_FILES['Imagen']['tmp_name'], $target_file)) {
+        $imagen = basename($_FILES['Imagen']['name']);
+    } else {
+        $imagen = null;
+    }
 
-    $categorias = array();
-    $categorias["idCategorias"] = $_POST["Categorias"];
-    $proveedores = array();
-    $proveedores["idProveedores"] = $_POST["Proveedores"];
+    //Creamos un array de los productos
+    $producto = [
+        "Nombre" => $nombre,
+        "Descripcion" => $descripcion,
+        "Peso" => $peso,
+        "Material" => $material,
+        "Marca" => $marca,
+        "idCategorias" => $categorias,
+        "Precio" => $precio,
+        "Stock" => $stock,
+        "FechaAdquisicion" => $fechaAdquisicion,
+        "FechaCaducidad" => $fechaCaducidad,
+        "Imagen" => $imagen
+    ];
 
-    $gestorProduct = new Productos();
-    $resultado = $gestorProduct->insertarProducto($producto, $categorias, $proveedores, $conexPDO);
+    //Creamos un objeto de productos
+    $gestorProducto = new Productos();
 
+    //Insertamos el producto
+    $resultado = $gestorProducto->insertarProducto($producto, $proveedores, $conexPDO);
+
+    //Gestionamos los mensajes
     if ($resultado) {
         $mensaje = "Se ha añadido el nuevo producto con éxito";
     } else {
@@ -73,12 +78,13 @@ if (
     }
 
     //Recolectamos los datos de los Productos
-    $datosProductos = $gestorProduct->obtenerTodosProductos($conexPDO);
+    $datosProductos = $gestorProducto->obtenerTodosProductos($conexPDO);
 
     //Paginacion
-    $totalProductos = $gestorProduct->obtenerTodosProductos($conexPDO);
+    $totalProductos = $gestorProducto->obtenerTodosProductos($conexPDO);
     $itemsPorPagina = 10;
     $totalPaginas = ceil(count($totalProductos) / $itemsPorPagina);
+
 
     if (isset($_POST['Pag'])) {
         $paginaActual = $_POST['Pag'];
@@ -90,13 +96,9 @@ if (
     }
 
     try {
-        $datosProductos = $gestorProduct->getProductosPag($conexPDO, true, "idProductos", $paginaActual, $itemsPorPagina);
-        include("../views/gestionar_productos_vista.php");
+        $datosProductos = $gestorProducto->getProductosPag($conexPDO, true, "idProductos", $paginaActual, $itemsPorPagina);
+        include("../views/mostrar_productos_vista.php");
     } catch (\Throwable $th) {
         print("Error al pintar los Datos" . $th->getMessage());
     }
-} else {
-    //Sin datos cargados, cargamos la vista
-    $accion = "insertar";
-    include("../views/insertar_modificar_productos_vista.php");
 }

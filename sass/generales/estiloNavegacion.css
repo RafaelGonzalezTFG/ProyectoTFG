@@ -1,0 +1,49 @@
+:root {
+    --colorPrimario: #FFDF00;
+    --colorSecundario: #FFA200;
+    --colorDetalles: #FFC000;
+    --colorLetras: #000000;
+}
+
+.navbar {
+    background-color: var(--colorPrimario);
+}
+
+.navbar-brand img {
+    max-height: 80px;
+}
+
+.navbar-nav .nav-link {
+    color: var(--colorLetras) !important;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-nav .nav-link img {
+    max-height: 30px; /* Ajusta según el tamaño de tus iconos */
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* Mantiene la distancia entre el main y la barra de navegación */
+.mt-navbar {
+    margin-top: 70px; /*Ajusta este valor según la altura de tu navbar */
+}
+
+.navbar .dropdown-menu {
+    max-height: 70vh; /* Ajusta según tu preferencia */
+    overflow-y: auto;
+}
+
+/* Corrige problemas de posición del dropdown */
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+}
+
+.containerMiCuenta{
+    margin-top: 50px;
+}
+
